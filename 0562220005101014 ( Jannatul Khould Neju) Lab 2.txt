@@ -1,0 +1,92 @@
+
+
+Sub Task #1 - EMU8086 Assembly Program
+
+
+MOV AH, 09H        ; Display a string function
+LEA DX, question   ; Load the address of the string "?"
+INT 21H            ; Interrupt to display it
+
+; Read three initials
+MOV AH, 01H         ; Function to read character
+INT 21H             ; Read first character
+MOV [initials+0], AL
+
+INT 21H             ; Read second character
+MOV [initials+1], AL
+
+INT 21H             ; Read third character
+MOV [initials+2], AL
+
+; Display the 11x11 box
+MOV CX, 11          ; Set row count (11 rows)
+ROW_LOOP:
+    MOV DX, 0       ; Reset column index
+    MOV SI, 0       ; Set column index for box
+COLUMN_LOOP:
+    ; Check if we're in the middle row (5th row)
+    CMP CX, 5
+    JE  MIDDLE_ROW
+    MOV AH, 02H     ; Display '*' (asterisks)
+    MOV DL, '*'     ; Set DL to '*'
+    INT 21H         ; Display it
+    INC DX
+    LOOP COLUMN_LOOP
+    MOV AH, 02H     ; Newline
+    MOV DL, 0AH     ; Line feed
+    INT 21H
+    LOOP ROW_LOOP
+    RET
+
+MIDDLE_ROW:
+    MOV AH, 02H     ; Display '*' (before initials)
+    MOV DL, '*'     ; Set DL to '*'
+    INT 21H         ; Display it
+
+    MOV AL, [initials+0]
+    MOV DL, AL      ; Display the first initial
+    INT 21H         ; Interrupt to print the letter
+
+    MOV AL, [initials+1]
+    MOV DL, AL      ; Display the second initial
+    INT 21H         ; Interrupt to print the letter
+
+    MOV AL, [initials+2]
+    MOV DL, AL      ; Display the third initial
+    INT 21H         ; Interrupt to print the letter
+
+    MOV AH, 02H     ; Display '*' (after initials)
+    MOV DL, '*'     ; Set DL to '*'
+    INT 21H         ; Display it
+
+    MOV AH, 02H     ; Newline
+    MOV DL, 0AH     ; Line feed
+    INT 21H
+    LOOP ROW_LOOP
+
+question DB '?', 0    ; String for displaying '?'
+initials DB 3 DUP('$') ; Space to store initials
+
+
+
+Sub Task #2 - EMU8086 Assembly Program
+
+MOV CX, 10          ; Set row count (10 rows)
+ROW_LOOP_2:
+    MOV DX, 0       ; Reset column index
+    MOV SI, 0       ; Set column index for box
+COLUMN_LOOP_2:
+    MOV AH, 02H     ; Display '*' (asterisks)
+    MOV DL, '*'     ; Set DL to '*'
+    INT 21H         ; Display it
+    INC DX
+    LOOP COLUMN_LOOP_2
+    MOV AH, 02H     ; Newline
+    MOV DL, 0AH     ; Line feed
+    INT 21H
+    LOOP ROW_LOOP_2
+    RET
+
+
+
+

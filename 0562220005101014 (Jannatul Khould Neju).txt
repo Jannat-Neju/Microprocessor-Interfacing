@@ -1,0 +1,48 @@
+ORG 100h
+
+.DATA
+    MSG1 DB 'Enter first number (0-4): $'
+    MSG2 DB 0Dh, 0Ah, 'Enter second number (0-4): $'
+    MSG3 DB 0Dh, 0Ah, 'Sum: $'
+
+.CODE
+START:
+    MOV DX, OFFSET MSG1
+    MOV AH, 09H
+    INT 21H  ; Display first message
+    
+    MOV AH, 01H  ; Read first number
+    INT 21H
+    SUB AL, '0'  ; Convert to integer
+    MOV BL, AL
+    
+    MOV DX, OFFSET MSG2
+    MOV AH, 09H
+    INT 21H  ; Display second message
+    
+    MOV AH, 01H  ; Read second number
+    INT 21H
+    SUB AL, '0'  ; Convert to integer
+    ADD AL, BL   ; Add numbers
+    ADD AL, '0'  ; Convert back to ASCII
+    
+    MOV DX, OFFSET MSG3
+    MOV AH, 09H
+    INT 21H  ; Display sum message
+    
+    MOV AH, 02H  ; Function to print character
+    MOV DL, AL   ; Load sum character into DL
+    INT 21H      ; Print sum
+    
+    MOV DL, 0Dh  ; Newline (Carriage return)
+    INT 21H
+    MOV DL, 0Ah  ; Newline (Line feed)
+    INT 21H
+    
+    MOV AH, 08H  ; Wait for a key press
+    INT 21H
+    
+    MOV AH, 4CH  ; Exit
+    INT 21H
+
+END START
